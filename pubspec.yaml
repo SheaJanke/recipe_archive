@@ -41,6 +41,9 @@ dependencies:
   firebase_ui_auth: ^1.4.3
   firebase_ui_oauth_google: ^1.2.3
   flutter_dotenv: ^5.1.0
+  cloud_firestore: ^4.8.1
+  uuid: ^3.0.7
+  flutter_typeahead: ^4.6.1
 
 dev_dependencies:
   flutter_test:
