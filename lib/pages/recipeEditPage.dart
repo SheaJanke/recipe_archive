@@ -35,13 +35,14 @@ class RecipeEditPage extends StatefulWidget {
 class _RecipeEditPageState extends State<RecipeEditPage> {
   late TextEditingController _titleController;
   late TextEditingController _tagController;
-  List<String> _tagList = List.empty(growable: true);
+  late List<String> _tagList;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.recipe.name);
     _tagController = TextEditingController();
+    _tagList = List.from(widget.recipe.tags);
   }
 
   void addTagValueToList(String newTag) {
@@ -67,7 +68,10 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () {
-              Recipe saveRecipe = Recipe(id: widget.recipe.id, name: _titleController.value.text, tags: _tagList);
+              Recipe saveRecipe = Recipe(
+                  id: widget.recipe.id,
+                  name: _titleController.value.text,
+                  tags: _tagList);
               widget.db
                   .collection('users')
                   .doc(widget.user.uid)
@@ -88,6 +92,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
         ],
         title: TextFormField(
           controller: _titleController,
+          cursorColor: Colors.white,
           decoration: const InputDecoration(
             enabledBorder: titleBorder,
             focusedBorder: titleBorder,
@@ -105,7 +110,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
             TypeAheadField(
               textFieldConfiguration: TextFieldConfiguration(
                 controller: _tagController,
-                decoration: InputDecoration(hintText: 'Add Tag'),
+                decoration: InputDecoration(hintText: 'Add Tag', ),
                 onEditingComplete: () =>
                     addTagValueToList(_tagController.value.text),
               ),
