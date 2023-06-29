@@ -22,6 +22,27 @@ class RecipeListPage extends StatefulWidget {
 
 class _RecipeListPageState extends State<RecipeListPage> {
   List<String> _tagFilters = [];
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  void addValueToTagFilters(String newTag) {
+    if (!_tagFilters.contains(newTag)) {
+      setState(() {
+        _tagFilters.add(newTag);
+      });
+    }
+  }
+
+  void deleteValueFromTagFilters(String deleteTag) {
+    setState(() {
+      _tagFilters.remove(deleteTag);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,64 +74,115 @@ class _RecipeListPageState extends State<RecipeListPage> {
         ),
       ),
       backgroundColor: Colors.grey.shade200,
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: StreamBuilder(
-          stream: widget.db
-              .collection('users')
-              .doc(widget.user.uid)
-              .collection('recipes')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
+      body: StreamBuilder(
+        stream: widget.db
+            .collection('users')
+            .doc(widget.user.uid)
+            .collection('recipes')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
 
-            List<Recipe> recipes = snapshot.data!.docs
-                .map((doc) => Recipe.fromFirestore(doc, null))
-                .toList();
+          List<Recipe> recipes = snapshot.data!.docs
+              .map((doc) => Recipe.fromFirestore(doc, null))
+              .toList();
 
-            List<String> uniqueTags = List.empty(growable: true);
-            for (var recipe in recipes) {
-              for (var tag in recipe.tags) {
-                if (!uniqueTags.contains(tag)) {
-                  uniqueTags.add('#$tag');
-                }
+          List<String> uniqueTags = List.empty(growable: true);
+          for (var recipe in recipes) {
+            for (var tag in recipe.tags) {
+              if (!uniqueTags.contains(tag)) {
+                uniqueTags.add(tag);
               }
             }
+          }
 
-            return Column(
-              children: [
-                Autocomplete(
-                  onSelected: (option) {
-                    if (option is Recipe) {
-                      _navigateToRecipePage(option);
-                    }
-                  },
-                  displayStringForOption: (option) {
-                    if (option is Recipe) {
-                      return option.name;
-                    }
-                    return option.toString();
-                  },
-                  optionsBuilder: (TextEditingValue searchValue) {
-                    if (searchValue.text.isEmpty) {
-                      return List<Object>.empty();
-                    }
-                    var matchingTags = uniqueTags
-                        .where((tag) => contains(tag, searchValue.text));
-                    var matchingRecipes = recipes.where(
-                        (recipe) => contains(recipe.name, searchValue.text));
-                    return [...matchingRecipes, ...matchingTags];
-                  },
+          return Column(
+            children: [
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Autocomplete(
+                      onSelected: (option) {
+                        _searchController.clear();
+                        FocusScope.of(context).unfocus();
+                        if (option is Recipe) {
+                          _navigateToRecipePage(option);
+                        } else {
+                          addValueToTagFilters(option.toString());
+                        }
+                      },
+                      displayStringForOption: (option) {
+                        if (option is Recipe) {
+                          return option.name;
+                        }
+                        var tag = option.toString();
+                        return '#$tag';
+                      },
+                      optionsBuilder: (TextEditingValue searchValue) {
+                        if (searchValue.text.isEmpty) {
+                          return List<Object>.empty();
+                        }
+                        var matchingTags = uniqueTags
+                            .where((tag) => contains('#$tag', searchValue.text));
+                        var matchingRecipes = recipes.where((recipe) =>
+                            contains(recipe.name, searchValue.text));
+                        return [...matchingRecipes, ...matchingTags];
+                      },
+                      fieldViewBuilder: (BuildContext context,
+                          TextEditingController fieldTextEditingController,
+                          FocusNode fieldFocusNode,
+                          VoidCallback onFieldSubmitted) {
+                        _searchController = fieldTextEditingController;
+                        return TextField(
+                          autofocus: false,
+                          controller: fieldTextEditingController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              contentPadding: EdgeInsets.all(16),
+                              isDense: true,
+                              hintText: 'Search Recipe / Filter By Tag',
+                              prefixIcon: Icon(Icons.search)),
+                          focusNode: fieldFocusNode,
+                        );
+                      },
+                    ),
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: [
+                        for (String tag in _tagFilters)
+                          Chip(
+                            label: Text('#$tag'),
+                            onDeleted: () => deleteValueFromTagFilters(tag),
+                            deleteIcon: const Icon(
+                              Icons.close,
+                              size: 20,
+                            ),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.comfortable,
+                          ),
+                      ],
+                    )
+                  ],
                 ),
-                Expanded(
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
                   child: ListView.separated(
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 8);
@@ -120,10 +192,10 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         RecipeListItem(widget.user, recipes[i]),
                   ),
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

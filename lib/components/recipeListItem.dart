@@ -20,7 +20,7 @@ class RecipeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       borderRadius: borderRadius,
-      elevation: 2,
+      elevation: 1,
       shadowColor: Colors.blueGrey,
       child: ListTile(
         onTap: () => Navigator.push(
