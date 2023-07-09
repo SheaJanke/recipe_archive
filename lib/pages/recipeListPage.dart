@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipe_archive/components/recipeListItem.dart';
+import 'package:recipe_archive/components/tagList.dart';
 import 'package:recipe_archive/pages/recipeEditPage.dart';
 
 import '../models/recipe.dart';
@@ -104,6 +105,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
             }
           }
 
+          List<Recipe> filteredRecipes = recipes
+              .where(
+                (recipe) => _tagFilters.every(
+                  (tag) => recipe.tags.contains(tag),
+                ),
+              )
+              .toList();
+
           return Column(
             children: [
               Container(
@@ -133,8 +142,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         if (searchValue.text.isEmpty) {
                           return List<Object>.empty();
                         }
-                        var matchingTags = uniqueTags
-                            .where((tag) => contains('#$tag', searchValue.text));
+                        var matchingTags = uniqueTags.where(
+                            (tag) => contains('#$tag', searchValue.text));
                         var matchingRecipes = recipes.where((recipe) =>
                             contains(recipe.name, searchValue.text));
                         return [...matchingRecipes, ...matchingTags];
@@ -159,24 +168,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         );
                       },
                     ),
-                    Wrap(
-                      spacing: 4,
-                      runSpacing: 4,
-                      children: [
-                        for (String tag in _tagFilters)
-                          Chip(
-                            label: Text('#$tag'),
-                            onDeleted: () => deleteValueFromTagFilters(tag),
-                            deleteIcon: const Icon(
-                              Icons.close,
-                              size: 20,
-                            ),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: VisualDensity.comfortable,
-                          ),
-                      ],
-                    )
+                    _tagFilters.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                top: 8, left: 8, right: 8),
+                            child:
+                                TagList(_tagFilters, deleteValueFromTagFilters),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -187,9 +186,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 8);
                     },
-                    itemCount: recipes.length,
+                    itemCount: filteredRecipes.length,
                     itemBuilder: (ctx, i) =>
-                        RecipeListItem(widget.user, recipes[i]),
+                        RecipeListItem(widget.user, filteredRecipes[i]),
                   ),
                 ),
               ),

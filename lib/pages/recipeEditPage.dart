@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:recipe_archive/components/tagList.dart';
 import 'package:recipe_archive/models/recipe.dart';
 
 const UnderlineInputBorder titleBorder = UnderlineInputBorder(
@@ -110,7 +111,9 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
             TypeAheadField(
               textFieldConfiguration: TextFieldConfiguration(
                 controller: _tagController,
-                decoration: InputDecoration(hintText: 'Add Tag', ),
+                decoration: InputDecoration(
+                  hintText: 'Add Tag',
+                ),
                 onEditingComplete: () =>
                     addTagValueToList(_tagController.value.text),
               ),
@@ -128,23 +131,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
             SizedBox(
               height: 8,
             ),
-            Wrap(
-              spacing: 4,
-              runSpacing: 4,
-              children: [
-                for (String tag in _tagList)
-                  Chip(
-                    label: Text('#$tag'),
-                    onDeleted: () => deleteTagValueFromList(tag),
-                    deleteIcon: const Icon(
-                      Icons.close,
-                      size: 20,
-                    ),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: VisualDensity.comfortable,
-                  ),
-              ],
-            )
+            TagList(_tagList, deleteTagValueFromList),
           ],
         ),
       ),

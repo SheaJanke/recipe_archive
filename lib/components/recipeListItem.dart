@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:recipe_archive/constants/colors.dart';
 
 import '../models/recipe.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class RecipeListItem extends StatelessWidget {
                 String tag = recipe.tags[i];
                 int numExtraTags = recipe.tags.length - maxTagsDisplayed;
                 return Chip(
-                  backgroundColor: Colors.blue.shade100,
+                  backgroundColor: TAG_COLOR,
                   label: Text(
                     i == maxTagsDisplayed ? '+$numExtraTags' : '#$tag',
                   ),
