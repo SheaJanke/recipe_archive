@@ -37,6 +37,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
   late TextEditingController _titleController;
   late TextEditingController _tagController;
   late List<String> _tagList;
+  late TextEditingController _notesController;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
     _titleController = TextEditingController(text: widget.recipe.name);
     _tagController = TextEditingController();
     _tagList = List.from(widget.recipe.tags);
+    _notesController = TextEditingController(text: widget.recipe.notes);
   }
 
   void addTagValueToList(String newTag) {
@@ -70,9 +72,11 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
             icon: const Icon(Icons.save),
             onPressed: () {
               Recipe saveRecipe = Recipe(
-                  id: widget.recipe.id,
-                  name: _titleController.value.text,
-                  tags: _tagList);
+                id: widget.recipe.id,
+                name: _titleController.value.text,
+                tags: _tagList,
+                notes: _notesController.value.text,
+              );
               widget.db
                   .collection('users')
                   .doc(widget.user.uid)
@@ -132,6 +136,21 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
               height: 8,
             ),
             TagList(_tagList, deleteTagValueFromList),
+            SizedBox(
+              height: 16,
+            ),
+            TextField(
+              controller: _notesController,
+              keyboardType: TextInputType.multiline,
+              maxLines: 15,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                isDense: true,
+                hintText: 'Notes',
+              ),
+            )
           ],
         ),
       ),
