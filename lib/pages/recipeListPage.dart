@@ -24,6 +24,7 @@ class RecipeListPage extends StatefulWidget {
 class _RecipeListPageState extends State<RecipeListPage> {
   List<String> _tagFilters = [];
   late TextEditingController _searchController;
+  List<String> _allTags = [];
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
           builder: (context) => RecipeEditPage(
             user: widget.user,
             recipe: recipe,
+            allTags: _allTags,
           ),
         ),
       );
@@ -104,6 +106,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
               }
             }
           }
+          Future.delayed(Duration.zero, () {
+            setState(() {
+              _allTags = uniqueTags;
+            });
+          });
 
           List<Recipe> filteredRecipes = recipes
               .where(
@@ -187,8 +194,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       return const SizedBox(height: 8);
                     },
                     itemCount: filteredRecipes.length,
-                    itemBuilder: (ctx, i) =>
-                        RecipeListItem(widget.user, filteredRecipes[i]),
+                    itemBuilder: (ctx, i) => RecipeListItem(
+                      widget.user,
+                      filteredRecipes[i],
+                      _allTags,
+                    ),
                   ),
                 ),
               ),
@@ -204,6 +214,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
               builder: (context) => RecipeEditPage(
                 user: widget.user,
                 recipe: Recipe(),
+                allTags: _allTags,
               ),
             ),
           );

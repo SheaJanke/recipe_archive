@@ -12,10 +12,11 @@ const borderRadius = BorderRadius.all(Radius.circular(8));
 const maxTagsDisplayed = 3;
 
 class RecipeListItem extends StatelessWidget {
-  const RecipeListItem(this.user, this.recipe, {super.key});
+  const RecipeListItem(this.user, this.recipe, this.allTags, {super.key});
 
   final User user;
   final Recipe recipe;
+  final List<String> allTags;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,7 @@ class RecipeListItem extends StatelessWidget {
             builder: (context) => RecipeEditPage(
               user: user,
               recipe: recipe,
+              allTags: allTags,
             ),
           ),
         ),

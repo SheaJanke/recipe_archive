@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:recipe_archive/components/recipeImage.dart';
 import 'package:recipe_archive/components/tagList.dart';
 import 'package:recipe_archive/models/recipe.dart';
+import 'package:recipe_archive/pages/recipeListPage.dart';
 
 const UnderlineInputBorder titleBorder = UnderlineInputBorder(
   borderSide: BorderSide(color: Colors.white),
@@ -23,11 +29,18 @@ SnackBar failureSnackBar = SnackBar(
 );
 
 class RecipeEditPage extends StatefulWidget {
-  RecipeEditPage({super.key, required this.user, required this.recipe});
+  RecipeEditPage(
+      {super.key,
+      required this.user,
+      required this.recipe,
+      required this.allTags});
 
   final User user;
   final Recipe recipe;
+  final List<String> allTags;
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final Reference storageRef = FirebaseStorage.instance.ref();
+  final ImagePicker picker = ImagePicker();
 
   @override
   _RecipeEditPageState createState() => _RecipeEditPageState();
@@ -38,6 +51,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
   late TextEditingController _tagController;
   late List<String> _tagList;
   late TextEditingController _notesController;
+  late List<String> _imgUrls;
 
   @override
   void initState() {
@@ -46,6 +60,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
     _tagController = TextEditingController();
     _tagList = List.from(widget.recipe.tags);
     _notesController = TextEditingController(text: widget.recipe.notes);
+    _imgUrls = List.from(widget.recipe.imgUrls);
   }
 
   void addTagValueToList(String newTag) {
@@ -76,6 +91,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
                 name: _titleController.value.text,
                 tags: _tagList,
                 notes: _notesController.value.text,
+                imgUrls: _imgUrls,
               );
               widget.db
                   .collection('users')
@@ -115,18 +131,19 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
             TypeAheadField(
               textFieldConfiguration: TextFieldConfiguration(
                 controller: _tagController,
-                decoration: InputDecoration(
-                  hintText: 'Add Tag',
-                ),
+                decoration:
+                    InputDecoration(hintText: 'Add Tag', prefixText: '#'),
                 onEditingComplete: () =>
                     addTagValueToList(_tagController.value.text),
               ),
               suggestionsCallback: (pattern) {
-                return ['abc', 'def', 'geh'];
+                return widget.allTags.where(
+                    (tag) => !_tagList.contains(tag) && contains(tag, pattern));
               },
+              hideOnEmpty: true,
               itemBuilder: (context, suggestion) {
                 return ListTile(
-                  title: Text(suggestion),
+                  title: Text('#$suggestion'),
                 );
               },
               onSuggestionSelected: addTagValueToList,
@@ -150,9 +167,34 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
                 isDense: true,
                 hintText: 'Notes',
               ),
+            ),
+            Wrap(
+              children: [
+                for (String imgUrl in _imgUrls) RecipeImage(imgUrl: imgUrl)
+              ],
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Capture a photo.
+          final XFile? photo = await widget.picker
+              .pickImage(source: ImageSource.camera, imageQuality: 25);
+          if (photo == null) {
+            return;
+          }
+          final String storagePath = '${widget.user.uid}/${uuid.v4()}.jpg';
+          final imageRef = widget.storageRef.child(storagePath);
+          imageRef.putFile(File(photo.path)).then(
+                (p0) => setState(
+                  () {
+                    _imgUrls.add(storagePath);
+                  },
+                ),
+              );
+        },
+        child: const Icon(Icons.camera),
       ),
     );
   }
