@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_archive/constants/colors.dart';
 
 class TagList extends StatelessWidget {
-  const TagList(this.tags, this.onDeleteTag, {super.key});
+  const TagList({super.key, required this.tags, this.onDeleteTag});
 
   final List<String> tags;
   final Function(String deletedTag)? onDeleteTag;
@@ -17,7 +17,7 @@ class TagList extends StatelessWidget {
           Chip(
             backgroundColor: TAG_COLOR,
             label: Text('#$tag'),
-            onDeleted: () => onDeleteTag!(tag),
+            onDeleted: onDeleteTag != null ? () => onDeleteTag!(tag) : null,
             deleteIcon: onDeleteTag != null
                 ? const Icon(
                     Icons.close,

@@ -180,7 +180,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             padding: const EdgeInsets.only(
                                 top: 8, left: 8, right: 8),
                             child:
-                                TagList(_tagFilters, deleteValueFromTagFilters),
+                                TagList(tags: _tagFilters, onDeleteTag: deleteValueFromTagFilters),
                           )
                         : const SizedBox.shrink(),
                   ],
@@ -221,7 +221,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
