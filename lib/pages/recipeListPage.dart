@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipe_archive/components/recipeListItem.dart';
@@ -48,7 +49,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   @override
   Widget build(BuildContext context) {
-    void _navigateToRecipePage(Recipe recipe) {
+    void navigateToRecipePage(Recipe recipe) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -107,9 +108,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
             }
           }
           Future.delayed(Duration.zero, () {
-            setState(() {
-              _allTags = uniqueTags;
-            });
+            if (!listEquals(_allTags, uniqueTags)) {
+              setState(() {
+                _allTags = uniqueTags;
+              });
+            }
           });
 
           List<Recipe> filteredRecipes = recipes
@@ -133,7 +136,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         _searchController.clear();
                         FocusScope.of(context).unfocus();
                         if (option is Recipe) {
-                          _navigateToRecipePage(option);
+                          navigateToRecipePage(option);
                         } else {
                           addValueToTagFilters(option.toString());
                         }
@@ -179,8 +182,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         ? Padding(
                             padding: const EdgeInsets.only(
                                 top: 8, left: 8, right: 8),
-                            child:
-                                TagList(tags: _tagFilters, onDeleteTag: deleteValueFromTagFilters),
+                            child: TagList(
+                                tags: _tagFilters,
+                                onDeleteTag: deleteValueFromTagFilters),
                           )
                         : const SizedBox.shrink(),
                   ],

@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,16 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCm101OOFidmcWkus0MJ3jXvrzESgpXkQY',
-    appId: '1:507431116783:web:7657717b79f13743e6601a',
-    messagingSenderId: '507431116783',
-    projectId: 'recipe-archive-ee027',
-    authDomain: 'recipe-archive-ee027.firebaseapp.com',
-    storageBucket: 'recipe-archive-ee027.appspot.com',
-    measurementId: 'G-46S97M3M4Z',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAVtci12ItO3kENYkY7TXW7qMm7LKTlY4k',
     appId: '1:507431116783:android:738d83e09978ee18e6601a',
@@ -66,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBSOSH8hIzLO9Th_74Z-pX_f7Va4jTF3es',
-    appId: '1:507431116783:ios:827c9027c315b7f1e6601a',
+    appId: '1:507431116783:ios:93c165f2573e470fe6601a',
     messagingSenderId: '507431116783',
     projectId: 'recipe-archive-ee027',
     storageBucket: 'recipe-archive-ee027.appspot.com',
+    androidClientId: '507431116783-n6fh4pbiug2j7f0i31jeqtsm37b9582j.apps.googleusercontent.com',
     iosClientId: '507431116783-4bn1peane6p44khf6l34m2pjikk84r2d.apps.googleusercontent.com',
     iosBundleId: 'com.example.recipeArchive',
   );
