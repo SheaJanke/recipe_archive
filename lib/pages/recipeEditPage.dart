@@ -33,11 +33,13 @@ class RecipeEditPage extends StatefulWidget {
       {super.key,
       required this.user,
       required this.recipe,
-      required this.allTags});
+      required this.allTags,
+      required this.startEditMode});
 
   final User user;
   final Recipe recipe;
   final List<String> allTags;
+  final bool startEditMode;
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final Reference storageRef = FirebaseStorage.instance.ref();
   final ImagePicker picker = ImagePicker();
@@ -62,6 +64,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
     _tagList = List.from(widget.recipe.tags);
     _notesController = TextEditingController(text: widget.recipe.notes);
     _imgUrls = List.from(widget.recipe.imgUrls);
+    _editMode = widget.startEditMode;
   }
 
   void addTagValueToList(String newTag) {

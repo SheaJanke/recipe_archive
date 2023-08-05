@@ -57,6 +57,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
             user: widget.user,
             recipe: recipe,
             allTags: _allTags,
+            startEditMode: false,
           ),
         ),
       );
@@ -219,6 +220,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 user: widget.user,
                 recipe: Recipe(),
                 allTags: _allTags,
+                startEditMode: true,
               ),
             ),
           );

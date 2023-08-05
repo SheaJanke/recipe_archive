@@ -32,6 +32,7 @@ class RecipeListItem extends StatelessWidget {
               user: user,
               recipe: recipe,
               allTags: allTags,
+              startEditMode: false,
             ),
           ),
         ),

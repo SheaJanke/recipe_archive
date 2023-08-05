@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>507431116783-4bn1peane6p44khf6l34m2pjikk84r2d.apps.googleusercontent.com</string>
+	<string>86838221971-debf9ob3oq689qbt7jpisf4p8e587l7l.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.507431116783-4bn1peane6p44khf6l34m2pjikk84r2d</string>
+	<string>com.googleusercontent.apps.86838221971-debf9ob3oq689qbt7jpisf4p8e587l7l</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>507431116783-n6fh4pbiug2j7f0i31jeqtsm37b9582j.apps.googleusercontent.com</string>
+	<string>86838221971-3v7oclu7md68piimlupbd2g1l11ojrkd.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBSOSH8hIzLO9Th_74Z-pX_f7Va4jTF3es</string>
+	<string>AIzaSyCQ3DYfwSuTjgUcpqs195naWjHXiv_VYhk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>507431116783</string>
+	<string>86838221971</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.recipeArchive</string>
+	<string>com.cowbraingames.recipeArchive</string>
 	<key>PROJECT_ID</key>
-	<string>recipe-archive-ee027</string>
+	<string>recipe-archive-v2</string>
 	<key>STORAGE_BUCKET</key>
-	<string>recipe-archive-ee027.appspot.com</string>
+	<string>recipe-archive-v2.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:507431116783:ios:827c9027c315b7f1e6601a</string>
+	<string>1:86838221971:ios:f11e0515576211df904166</string>
 </dict>
 </plist>

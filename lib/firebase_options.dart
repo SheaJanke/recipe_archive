@@ -50,21 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAVtci12ItO3kENYkY7TXW7qMm7LKTlY4k',
-    appId: '1:507431116783:android:738d83e09978ee18e6601a',
-    messagingSenderId: '507431116783',
-    projectId: 'recipe-archive-ee027',
-    storageBucket: 'recipe-archive-ee027.appspot.com',
+    apiKey: 'AIzaSyD2j_50dOyg4faBaIqkf7r2C2ZF4Y9Of4s',
+    appId: '1:86838221971:android:38d00c48213c7c0b904166',
+    messagingSenderId: '86838221971',
+    projectId: 'recipe-archive-v2',
+    storageBucket: 'recipe-archive-v2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBSOSH8hIzLO9Th_74Z-pX_f7Va4jTF3es',
-    appId: '1:507431116783:ios:93c165f2573e470fe6601a',
-    messagingSenderId: '507431116783',
-    projectId: 'recipe-archive-ee027',
-    storageBucket: 'recipe-archive-ee027.appspot.com',
-    androidClientId: '507431116783-n6fh4pbiug2j7f0i31jeqtsm37b9582j.apps.googleusercontent.com',
-    iosClientId: '507431116783-4bn1peane6p44khf6l34m2pjikk84r2d.apps.googleusercontent.com',
-    iosBundleId: 'com.example.recipeArchive',
+    apiKey: 'AIzaSyCQ3DYfwSuTjgUcpqs195naWjHXiv_VYhk',
+    appId: '1:86838221971:ios:f11e0515576211df904166',
+    messagingSenderId: '86838221971',
+    projectId: 'recipe-archive-v2',
+    storageBucket: 'recipe-archive-v2.appspot.com',
+    androidClientId: '86838221971-3v7oclu7md68piimlupbd2g1l11ojrkd.apps.googleusercontent.com',
+    iosClientId: '86838221971-debf9ob3oq689qbt7jpisf4p8e587l7l.apps.googleusercontent.com',
+    iosBundleId: 'com.cowbraingames.recipeArchive',
   );
 }

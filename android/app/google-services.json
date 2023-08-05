@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "507431116783",
-    "project_id": "recipe-archive-ee027",
-    "storage_bucket": "recipe-archive-ee027.appspot.com"
+    "project_number": "86838221971",
+    "project_id": "recipe-archive-v2",
+    "storage_bucket": "recipe-archive-v2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:507431116783:android:738d83e09978ee18e6601a",
+        "mobilesdk_app_id": "1:86838221971:android:38d00c48213c7c0b904166",
         "android_client_info": {
           "package_name": "com.example.recipe_archive"
         }
       },
       "oauth_client": [
         {
-          "client_id": "507431116783-n6fh4pbiug2j7f0i31jeqtsm37b9582j.apps.googleusercontent.com",
+          "client_id": "86838221971-3v7oclu7md68piimlupbd2g1l11ojrkd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.recipe_archive",
@@ -22,24 +22,24 @@
           }
         },
         {
-          "client_id": "507431116783-41h1bcmvetelev88i7ld2j1mr91eh516.apps.googleusercontent.com",
+          "client_id": "86838221971-k7o2aep3s26rm7pl9u44be2pptbqocv6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAVtci12ItO3kENYkY7TXW7qMm7LKTlY4k"
+          "current_key": "AIzaSyD2j_50dOyg4faBaIqkf7r2C2ZF4Y9Of4s"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "507431116783-41h1bcmvetelev88i7ld2j1mr91eh516.apps.googleusercontent.com",
+              "client_id": "86838221971-k7o2aep3s26rm7pl9u44be2pptbqocv6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "507431116783-4bn1peane6p44khf6l34m2pjikk84r2d.apps.googleusercontent.com",
+              "client_id": "86838221971-7e5ia6u7h6708mspp91nejc3nemjppvf.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.recipeArchive"
