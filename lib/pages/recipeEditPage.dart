@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -156,80 +157,85 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            !_editMode
-                ? IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Delete recipe?"),
-                          content: Text(
-                              "Are you sure you want to delete this recipe?"),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: Text(
-                                "No",
+      child: KeyboardDismissOnTap(
+        child: Scaffold(
+          appBar: AppBar(
+            actions: [
+              !_editMode
+                  ? IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Delete recipe?"),
+                            content: Text(
+                                "Are you sure you want to delete this recipe?"),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(
+                                  "No",
+                                ),
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                widget.db
-                                    .collection('users')
-                                    .doc(widget.user.uid)
-                                    .collection('recipes')
-                                    .doc(widget.recipe.id)
-                                    .delete()
-                                    .then((value) => Navigator.pop(context));
-                                Navigator.pop(context, true);
-                              },
-                              child: Text("Yes"),
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.red.shade600)),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  )
-                : const SizedBox.shrink(),
-            _editMode
-                ? IconButton(
-                    icon: const Icon(Icons.save),
-                    onPressed: handleSave,
-                    tooltip: 'Save',
-                  )
-                : IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      setState(() {
-                        _editMode = true;
-                      });
-                    },
-                    tooltip: 'Edit',
-                  ),
-          ],
-          title: TextFormField(
-            controller: _titleController,
-            cursorColor: Colors.white,
-            decoration: InputDecoration(
-              enabledBorder: _editMode ? titleBorder : InputBorder.none,
-              focusedBorder: _editMode ? titleBorder : InputBorder.none,
-              isDense: true,
+                              ElevatedButton(
+                                onPressed: () {
+                                  widget.db
+                                      .collection('users')
+                                      .doc(widget.user.uid)
+                                      .collection('recipes')
+                                      .doc(widget.recipe.id)
+                                      .delete()
+                                      .then((value) => Navigator.pop(context));
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Yes"),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.red.shade600)),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  : const SizedBox.shrink(),
+              _editMode
+                  ? IconButton(
+                      icon: const Icon(Icons.save),
+                      onPressed: handleSave,
+                      tooltip: 'Save',
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          _editMode = true;
+                        });
+                      },
+                      tooltip: 'Edit',
+                    ),
+            ],
+            title: TextFormField(
+              controller: _titleController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                enabledBorder: _editMode ? titleBorder : InputBorder.none,
+                focusedBorder: _editMode ? titleBorder : InputBorder.none,
+                isDense: true,
+              ),
+              onTap: () => _titleController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _titleController.value.text.length),
+              readOnly: !_editMode,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
             ),
-            readOnly: !_editMode,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
+          body: Padding(
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -266,66 +272,80 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
                 SizedBox(
                   height: 16,
                 ),
-                TextField(
-                  controller: _notesController,
-                  keyboardType: TextInputType.multiline,
-                  minLines: 5,
-                  maxLines: 20,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                Expanded(
+                  child: TextField(
+                    controller: _notesController,
+                    expands: true,
+                    keyboardType: TextInputType.multiline,
+                    minLines: null,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      focusedBorder: _editMode
+                          ? null
+                          : OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                      isDense: true,
+                      hintText: 'Notes',
                     ),
-                    focusedBorder: _editMode
-                        ? null
-                        : OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                    isDense: true,
-                    hintText: 'Notes',
+                    readOnly: !_editMode,
+                    textAlignVertical: TextAlignVertical.top,
                   ),
-                  readOnly: !_editMode,
                 ),
                 SizedBox(
                   height: 16,
                 ),
-                SizedBox(
-                  height: 150,
-                  child: ListView.separated(
-                    itemBuilder: (context, index) => RecipeImage(
-                      imgUrl: _imgUrls[index],
-                      onDeleteImg: _editMode ? deleteImg : null,
-                    ),
-                    itemCount: _imgUrls.length,
-                    separatorBuilder: (context, index) => SizedBox(
-                      width: 8,
-                    ),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                  ),
-                ),
+                KeyboardVisibilityBuilder(
+                  builder: (p0, isKeyboardVisible) {
+                    if (isKeyboardVisible) {
+                      return SizedBox.shrink();
+                    }
+                    return SizedBox(
+                      height: 150,
+                      child: ListView.separated(
+                        itemBuilder: (context, index) => RecipeImage(
+                          imgUrl: _imgUrls[index],
+                          onDeleteImg: _editMode ? deleteImg : null,
+                        ),
+                        itemCount: _imgUrls.length,
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: 8,
+                        ),
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                      ),
+                    );
+                  },
+                )
               ],
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            // Capture a photo.
-            final XFile? photo = await widget.picker
-                .pickImage(source: ImageSource.camera, imageQuality: 25);
-            if (photo == null) {
-              return;
-            }
-            final String storagePath = '${widget.user.uid}/${uuid.v4()}.jpg';
-            final imageRef = widget.storageRef.child(storagePath);
-            imageRef.putFile(File(photo.path)).then(
-                  (p0) => setState(
-                    () {
-                      _imgUrls.add(storagePath);
-                    },
-                  ),
-                );
-          },
-          child: const Icon(Icons.camera_alt),
+          floatingActionButton: _editMode
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    // Capture a photo.
+                    final XFile? photo = await widget.picker.pickImage(
+                        source: ImageSource.camera, imageQuality: 25);
+                    if (photo == null) {
+                      return;
+                    }
+                    final String storagePath =
+                        '${widget.user.uid}/${uuid.v4()}.jpg';
+                    final imageRef = widget.storageRef.child(storagePath);
+                    imageRef.putFile(File(photo.path)).then(
+                          (p0) => setState(
+                            () {
+                              _imgUrls.add(storagePath);
+                            },
+                          ),
+                        );
+                  },
+                  child: const Icon(Icons.camera_alt),
+                )
+              : null,
         ),
       ),
       onWillPop: () async {

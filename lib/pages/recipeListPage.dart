@@ -74,7 +74,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
         ],
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
-          'Recipe Archive',
+          'Recipe Box',
           style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         ),
       ),
